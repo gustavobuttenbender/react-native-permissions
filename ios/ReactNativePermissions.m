@@ -115,7 +115,8 @@ RCT_REMAP_METHOD(getPermissionStatus, getPermissionStatus:(RNPType)type json:(id
 
         case RNPTypeLocation: {
             NSString *locationPermissionType = [RCTConvert NSString:json];
-            status = [RNPLocation getStatusForType:locationPermissionType];
+            NSString *lastType = self.locationMgr.lastTypeRequested;
+            status = [RNPLocation getStatusForType:locationPermissionType :lastType];
             break;
         }
         case RNPTypeCamera:

@@ -11,7 +11,8 @@
 
 @interface RNPLocation : NSObject
 
-+ (NSString *)getStatusForType:(NSString *)type;
++ (NSString *)getStatusForType:(NSString *)type :(NSString *) lastType;
 - (void)request:(NSString *)type completionHandler:(void (^)(NSString *))completionHandler;
+@property (nonatomic, readonly, strong) NSString * lastTypeRequested;
 
 @end
