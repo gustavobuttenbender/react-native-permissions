@@ -70,6 +70,7 @@ NSString *const EscalatedServiceRequested = @"RNP_ESCALATED_PERMISSION_REQUESTED
 - (void)request:(NSString*)type completionHandler:(void (^)(NSString *))completionHandler {
     int status = [CLLocationManager authorizationStatus];
     NSString * rnpStatus = [RNPLocation convert:status for:type :self.lastTypeRequested];
+    
     if (rnpStatus == RNPStatusUndetermined ||
         (status == kCLAuthorizationStatusAuthorizedWhenInUse && [type isEqualToString:@"always"] && ![self.escelatedRightsRequested boolValue])){
         self.lastTypeRequested = type;
@@ -83,14 +84,6 @@ NSString *const EscalatedServiceRequested = @"RNP_ESCALATED_PERMISSION_REQUESTED
             self.escelatedRightsRequested = [NSNumber numberWithBool:YES];
             
             [self.locationManager requestAlwaysAuthorization];
-            
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                if(self.completionHandler){
-                    self.completionHandler(RNPStatusDenied);
-                    self.completionHandler = nil;
-                }
-            });
-            
         } else {
             [self.locationManager requestWhenInUseAuthorization];
         }
